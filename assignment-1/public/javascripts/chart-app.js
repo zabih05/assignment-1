@@ -1,14 +1,13 @@
 var app = angular.module('app', []);
 
-app.controller('dataController', function($scope, $http) {
-  $http.get("https://assignment-1-zabih.c9users.io/houseprice").then(function (response) {
-    
-      google.charts.load('current', {packages: ['corechart', 'bar']});
-      google.charts.setOnLoadCallback(function() {
-        formatDataTable(response.data);
-      });
+google.load("visualization", "1", {packages:["corechart"]});
+
+app.controller('MainController', ['$scope', '$http',  function($scope, $http) {
+  $http.get('/houseprice').success(function(data){
+  
+   formatDataTable(data);
   });
-});
+}]);
 
 function formatDataTable(chartdata) {
   var data = [];
@@ -23,7 +22,7 @@ function formatDataTable(chartdata) {
     data.push(temp);
   }
   
-  var g_data = google.visualization.arrayToDataTable(data);
+  var g_data = google.visualization.arrayToDataTable(data, false);
   var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
   chart.draw(g_data, getOptions());
 }
